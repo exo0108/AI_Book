@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>熊貓與小豬的奇幻冒險</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #a2ba9f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* 填滿整個視窗 */
+            width: 100%;
+            /* 填滿整個視窗 */
+        }
+
+        #cover {
+            background-color: #fff;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2), -4px -4px 10px rgba(84, 84, 84, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+
+        }
+
+        #app {
+
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* 讓內容置中 */
+        }
+
+        section {
+            padding: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            border-radius: 15px;
+
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .game-container {
+            height: 80%;
+            /* 可調整高度來達到需要的比例 */
+            display: flex;
+            flex-direction: row;
+            /* 橫向排列 */
+            justify-content: flex-start;
+            align-items: flex-start;
+            /* 改為對齊上方 */
+        }
+
+        /* 圖片容器 */
+        .image-container {
+            width: 65%;
+            /* 圖片區域佔 65% */
+            padding: 10px;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px;
+            /* 圓角邊緣 */
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.15), -10px -10px 20px rgba(255, 255, 255, 0.7);
+            transition: box-shadow 0.3s ease;
+            /* 設置過渡效果 */
+        }
+
+
+        .interactive-container {
+            width: 35%;
+            /* 內容和互動區域佔 35% */
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        #bridge {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(5, 50px);
+            gap: 5px;
+            justify-content: center;
+            margin-top: 20px;
+            background-color: rgb(154, 225, 219);
+            padding-top: 20px;
+            padding-bottom: 20px;
+
+        }
+
+        #bridge div {
+            width: 50px;
+            height: 50px;
+            background-color: rgb(231, 204, 130);
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        #tools {
+            width: 100%;
+
+        }
+
+        #tools,
+        #music-notes,
+        #items {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .tool,
+        .item {
+            padding: 10px;
+            background-color: #e4e4e4;
+            border: 5px solid #ffffff;
+            cursor: grab;
+            color: #ffffff;
+            font-weight: 800;
+            border-radius: 15px;
+        }
+
+        .note,
+        .item {
+            padding: 10px;
+            background-color: #45aa6c;
+            border: 5px solid #ffffff;
+            cursor: grab;
+            color: #ffffff;
+            font-weight: 800;
+            border-radius: 15px;
+        }
+
+        .tool:hover,
+        .note:hover,
+        .item:hover {
+            background-color: #ddd;
+        }
+
+        #firefox-area,
+        #note-slot,
+        #tablet-area {
+            border: 2px dashed #ccc;
+            height: 100px;
+            width: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #fff;
+            margin: 20px auto;
+            margin-top: 10px;
+        }
+
+        .context {
+            font-size: 22px;
+            font-weight: 600;
+            color: #656565;
+            line-height: 150%;
+        }
+
+        .context-2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #656565;
+            line-height: 150%;
+        }
+
+        .context-3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #5058be;
+            line-height: 150%;
+            margin-top: 5%;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #49b249;
+        }
+
+        .line {
+            border-top: 5px solid #86a786;
+            /* 頂部邊框 */
+            margin-bottom: 5%;
+            width: 100%;
+            /* 設定邊框寬度 */
+        }
+
+        .center-text {
+            width: 100%;
+            color: rgb(216, 82, 24);
+            font-size: 20px;
+            text-align: center;
+            margin: 0;
+            font-weight: 900;
+            margin-top: 5%;
+        }
+
+        .tool-img {
+            width: 100px;
+        }
+
+        .restart-btn {
+            background-color: #ff6347;
+        }
+
+        .restart-btn:hover {
+            background-color: #e55347;
+        }
+
+        /* Modal 样式 */
+        #success-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* 背景半透明 */
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        .modal-content,p{
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 150%;
+        }
+        
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 封面頁 -->
+        <section id="cover">
+            <div class="game-container">
+                <div class="image-container">
+                    <img src="cover-image.jpg" alt="封面圖片">
+                </div>
+                <div class="interactive-container">
+                    <h1>熊貓與小豬的奇幻冒險</h1>
+                    <div class="line"></div>
+                    <p class="context">
+                        在一片神秘的森林裡，住著一隻熱愛冒險的熊貓，名叫阿圓，和一隻喜歡發明的小豬，名叫小奇。他們是最好的朋友，總是一起探索森林的秘密和未解之謎。<br>某天，阿圓興奮地拿出一張古老的地圖，指著上面標示的「心願水晶」。
+                        <br>「小奇，這可是實現願望的傳說水晶！我們一定要去找它！」阿圓說。<br>
+                        「太棒了！讓我帶上工具箱，我們一定會成功的！」小奇回答，眼中閃爍著期待的光芒。
+                        <br>於是，他們收拾行囊，展開了一場充滿挑戰與奇蹟的冒險旅程。
+                    </p>
+                    <button id="start-btn">開始冒險</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 迷宮橋 -->
+        <section id="maze-bridge" class="hidden">
+            <div id="cover">
+                <div class="game-container">
+                    <div class="image-container">
+                        <img src="maze-bridge.jpg" alt="迷宮橋">
+                    </div>
+                    <div class="interactive-container">
+                        <h2>挑戰 1: 穿越迷宮橋</h2>
+                        <p class="context-2">
+                            阿圓和小奇走到一座奇特的橋前。這座橋像迷宮一樣，每當有人踩上去，橋的路徑就會不停變動，而且橋下是洶湧的河流，讓人望而卻步。
+                            「這可不是普通的橋，我們得想個辦法！」阿圓皺起眉頭。
+                            小奇迅速打開工具箱，取出他最新發明的伸縮繩索。
+                            「看我的！」小奇笑著說。
+                        </p>
+                        <p class="context-3">請幫助阿圓跳到正確的方塊橋，讓小奇可以將繩索勾住阿圓，小心有些方塊是壞掉的，請避開水！</p>
+                        <div id="bridge"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 火狐 -->
+        <section id="fire-fox" class="hidden">
+            <div id="cover">
+                <div class="game-container">
+                    <div class="image-container">
+                        <img src="fire-fox.jpg" alt="火狐">
+                    </div>
+                    <div class="interactive-container">
+                        <h2>挑戰 2: 拯救火狐</h2>
+                        <p class="context-2">
+                            他們繼續前行，忽然一隻全身燃燒著火焰的狐狸跳了出來，擋住了去路。
+                            「沒有通過我的考驗，就別想往前走！」火焰狐狸低吼，眼中閃著金色的光芒。
+                            小奇試圖用工具攻擊，但狐狸的火焰將工具燒得通紅，無法靠近。阿圓冷靜地觀察狐狸，發現它每次靠近水邊時，火焰會變得微弱。
+                            「狐狸怕水！跟我來！」阿圓大喊。
+                        </p>
+                        <p class="context-3">請拖動正確的工具來幫助火狐！</p>
+                        <div id="tools">
+                            <div class="tool" draggable="true" data-tool="water"><img class="tool-img" src="bucket.png">
+                            </div>
+                            <div class="tool" draggable="true" data-tool="hammer"><img class="tool-img" src="wood.png">
+                            </div>
+                        </div>
+                        <div id="firefox-area">請將正確物品拖到置此
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 音樂機關 -->
+        <section id="music-mechanism" class="hidden">
+            <div id="cover">
+                <div class="game-container">
+                    <div class="image-container">
+                        <img src="music-mechanism.jpg" alt="音樂機關">
+                    </div>
+                    <div class="interactive-container">
+                        <h2>挑戰 3: 解開音樂機關</h2>
+                        <p class="context-2">
+                            在接近水晶洞穴的大門前，他們進入了一間滿是音樂符號的房間，中央有一個古老的機關，上面寫著：「正確的旋律是開啟大門的鑰匙。」
+                            小奇從工具箱中拿出他隨身攜帶的手搖琴，根據牆壁上的音符線索，試探著彈奏旋律。
+                            「再高一點，小奇，快對了！」阿圓在一旁鼓勵道。
+                            
+                        </p>
+                        <p class="context-3">請將音符按照正確的順序排列來開啟大門的鑰匙！</p>
+                        <div id="music-notes">
+                            <div class="note" draggable="true" data-note="Do">Do</div>
+                            <div class="note" draggable="true" data-note="Fa">Fa</div>
+                            <div class="note" draggable="true" data-note="Mi">Mi</div>
+                            <div class="note" draggable="true" data-note="Re">Re</div>
+                        </div>
+                        <div id="note-slot"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 願望水晶 -->
+        <section id="wish-crystal" class="hidden">
+            <div id="cover">
+                <div class="game-container">
+                    <div class="image-container">
+                        <img src="crystal.jpg" alt="快樂結局">
+                    </div>
+                    <div class="interactive-container">
+                        <h2>挑戰 4: 啟動願望水晶</h2>
+                        <p class="context-2">
+                            洞穴深處，心願水晶靜靜地矗立在一座石台上，散發著溫暖的光芒。但旁邊的石碑上寫著：
+                            「啟動心願水晶，必須放棄對自己最重要的事物。」
+                            阿圓看著小奇，然後拿出他珍藏多年的冒險筆記，這是他所有探險故事的記錄和回憶。
+                            「我的願望是讓小奇的發明能幫助更多的動物。」阿圓說，將筆記放在石台上。
+                        </p>
+                        <p class="context-3">阿圓如何才能獲得心願水晶，請幫助阿圓將正確的物品放置在石碑上。</p>
+                        <div id="items">
+                            <div class="item" draggable="true" data-item="notebook"><img class="tool-img"
+                                    src="agenda.png"></div>
+                            <div class="item" draggable="true" data-item="rock"><img class="tool-img" src="pig.png">
+                            </div>
+                        </div>
+                        <div id="tablet-area">請將正確物品拖到置此</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 結局 -->
+        <section id="ending" class="hidden">
+            <div id="cover">
+                <div class="game-container">
+                    <div class="image-container">
+                        <img src="happy-ending.jpg" alt="快樂結局">
+                    </div>
+                    <div class="interactive-container">
+
+                        <h2>恭喜你完成所有關卡！你超棒!</h2>
+                        <p class="context-2">
+                            小奇的工具箱得到魔法的加持，他的發明變得更加神奇，能快速解決森林中動物的困難。
+                            回到森林，他們幫助動物建造溫暖的家、治療受傷的夥伴，甚至開發出能讓動物們交流的語音裝置。森林中充滿了歡笑和感激。
+                            阿圓和小奇站在彩虹下，動物們圍繞著他們，為他們的勇氣和無私的精神喝彩。他們的友誼也更加深厚，成為了森林裡的傳奇英雄。
+                        </p>
+                        <button class="button restart-btn" onclick="restartGame()">重新遊玩</button>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- 成功的 Modal -->
+<div id="success-modal" class="hidden">
+    <div class="modal-content">
+        <h2>挑戰成功！</h2>
+        <!-- 新增圖片 -->
+        <img id="success-image" src="" alt="成功圖片" style="width: 100%; max-width: 300px; margin-bottom: 20px;">
+        <p id="success-message"></p>
+        <button id="next-level-btn">進入下一關</button>
+    </div>
+</div>
+
+
+    <script>
+        function showSuccessModal(message, nextSectionId,imageUrl) {
+            const modal = document.getElementById('success-modal');
+            const successMessage = document.getElementById('success-message');
+            const nextLevelBtn = document.getElementById('next-level-btn');
+            const successImage = document.getElementById('success-image');
+
+            successMessage.textContent = message;  // 設置成功訊息
+    successImage.src = imageUrl;           // 設置圖片
+
+            // 顯示 Modal
+            modal.style.display = 'flex';
+
+            // 下一關按鈕點擊事件
+            nextLevelBtn.addEventListener('click', () => {
+                modal.style.display = 'none';  // 隱藏 Modal
+                sections.forEach(section => section.classList.add('hidden'));  // 隱藏所有關卡
+                document.getElementById(nextSectionId).classList.remove('hidden');  // 顯示下一關
+            });
+        }
+
+
+        function restartGame() {
+            location.reload();  // 重新載入當前頁面
+        }
+        const startBtn = document.getElementById('start-btn');
+        const sections = document.querySelectorAll('section');
+
+        startBtn.addEventListener('click', () => {
+            sections.forEach(section => section.classList.add('hidden'));
+            document.getElementById('maze-bridge').classList.remove('hidden');
+            generateBridge();
+        });
+
+        function generateBridge() {
+            const bridge = document.getElementById('bridge');
+            bridge.innerHTML = ''; // 清空之前的方塊
+
+            // 生成數學題目並計算答案
+            const question = generateMathQuestion();
+            const answer = question.answer; // 獲取答案
+
+            // 將答案映射為方塊的索引
+            const correctTiles = [answer]; // 假設只有一個正確的答案方塊，為了演示可以將數字當作方塊的索引
+            let correctCount = 0; // 用來記錄正確方塊的數量
+
+            // 顯示題目
+            const questionText = document.createElement('p');
+            questionText.classList.add('center-text');
+
+            document.body.appendChild(questionText);  // 添加到頁面中
+            questionText.textContent = `提示數學題: ${question.question} =？`;
+            document.querySelector('#maze-bridge .interactive-container').appendChild(questionText);
+
+            // 生成 10 個方塊
+            for (let i = 0; i < 10; i++) {
+                const tile = document.createElement('div');
+                tile.dataset.type = correctTiles.includes(i) ? 'bridge' : 'water'; // 設置方塊類型
+                tile.addEventListener('click', () => {
+                    if (tile.dataset.type === 'water') {
+                        tile.style.backgroundColor = 'red'; // 錯誤方塊變紅色
+                        alert('唉呦差點就掉下去了，請再試一次。');
+                    } else {
+                        tile.style.backgroundColor = 'green'; // 正確方塊變綠色
+                        correctCount++; // 增加正確方塊數量
+                    }
+                    // 檢查挑戰是否完成
+                    checkBridgeCompletion(correctCount);
+                });
+                bridge.appendChild(tile);
+            }
+        }
+
+        // 隨機生成一個簡單的數學題目
+        function generateMathQuestion() {
+            const num1 = Math.floor(Math.random() * 5) + 1; // 1 到 10 的隨機數字
+            const num2 = Math.floor(Math.random() * 5) + 1; // 1 到 10 的隨機數字
+            const question = `${num1} + ${num2}`;
+            const answer = num1 + num2 - 1;
+            return { question, answer };
+        }
+
+        function checkBridgeCompletion(correctCount) {
+            if (correctCount === 1) { // 假設有 1 個正確方塊
+                showSuccessModal('他用繩索勾住橋的一端，讓他和阿圓能穩穩地穿越迷宮般的橋面，成功抵達對岸。', 'fire-fox','end.png');
+            }
+        }
+
+
+
+        const tools = document.querySelectorAll('.tool');
+        const firefoxArea = document.getElementById('firefox-area');
+
+        tools.forEach(tool => {
+            tool.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('tool', tool.dataset.tool);
+            });
+        });
+
+        firefoxArea.addEventListener('dragover', e => e.preventDefault());
+        firefoxArea.addEventListener('drop', e => {
+            const tool = e.dataTransfer.getData('tool');
+            if (tool === 'water') {
+                showSuccessModal('小圓帶著小奇引開狐狸，最後將水潑向狐狸，熄滅了火焰。狐狸恢復成普通模樣，心悅誠服地讓他們通過。', 'music-mechanism','fox-end.webp');
+            } else {
+                alert('狐狸變得更兇猛了！請再試一次。');
+            }
+        });
+
+        const notes = document.querySelectorAll('.note');
+        const noteSlot = document.getElementById('note-slot');
+        const correctOrder = ['Do', 'Re', 'Mi', 'Fa']; // 正確音符順序
+
+        notes.forEach(note => {
+            note.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('note', note.dataset.note);
+            });
+        });
+
+        noteSlot.addEventListener('dragover', e => e.preventDefault());
+        noteSlot.addEventListener('drop', e => {
+            const note = e.dataTransfer.getData('note');
+            noteSlot.textContent += `${note} `; // 顯示所拖動的音符
+
+            // 檢查是否正確排序
+            const currentOrder = noteSlot.textContent.trim().split(' ').filter(Boolean);
+            if (currentOrder.length === correctOrder.length) {
+                if (JSON.stringify(currentOrder) === JSON.stringify(correctOrder)) {
+                    showSuccessModal('隨著最後一個音符響起，大門緩緩打開，七彩的光芒從門後洩出，照亮了整個房間。他們終於抵達了水晶洞穴！', 'wish-crystal','3-end.webp');
+
+                } else {
+                    alert('音符順序錯誤，請再試一次。');
+                    noteSlot.textContent = ''; // 如果順序錯誤，清空當前音符
+                }
+            }
+        });
+
+
+        const items = document.querySelectorAll('.item');
+        const tabletArea = document.getElementById('tablet-area');
+
+        items.forEach(item => {
+            item.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('item', item.dataset.item);
+            });
+        });
+
+        tabletArea.addEventListener('dragover', e => e.preventDefault());
+        tabletArea.addEventListener('drop', e => {
+            const item = e.dataTransfer.getData('item');
+            if (item === 'notebook') {
+                showSuccessModal('筆記消失在光芒中，心願水晶開始發出耀眼的亮光，然後一道魔法波動將小奇的工具箱包圍起來！', 'ending','4-end.webp');
+
+            } else {
+                alert('太難過了QQ');
+            }
+        });
+
+
+
+
+    </script>
+</body>
+
+</html>
